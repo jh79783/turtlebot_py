@@ -16,7 +16,6 @@ FLANN_INDEX_LSH = 6
 
 def main():
     remained_files = None
-    true_matched_files = None
     for category, image_files in train_files.items():
         other_category_files = []
 
@@ -34,33 +33,35 @@ def main():
                 same_category_files.remove(qimg_file)
 
                 TP, FP, true_matched_files = match_images(qimg_file, same_category_files)
-                # TP_other, FP_other, false_matched_files = match_images(qimg_file, other_category_files)
-
-                if best_score < TP - FP:
-                    best_score = TP - FP
+                # print("TP:", TP)
+                TP_other, FP_other, false_matched_files = match_images(qimg_file, other_category_files)
+                # print("other:", TP_other)
+                if best_score < TP - TP_other:
+                    best_score = TP - TP_other
                     best_file = qimg_file
-            print("file", best_file)
-            print("imgage_files:", image_files)
+            # print("image_files:", image_files)
             selected_categ_files.append(best_file)
-            if best_file is not None:
-                TP, FP, true_matched_files = match_images(best_file, image_files)
+
+            # print("bestfile", best_file)
+            TP, FP, true_matched_files = match_images(best_file, image_files)
             best_file = None
             best_score = 0
+            # print(true_matched_files)
             if true_matched_files is not None:
                 remained_files = [file for file in image_files if file not in true_matched_files]
                 image_files = remained_files
             else:
                 print("please modify datafile")
-            print("re", remained_files)
+            # print("re", remained_files)
 
         selected_files[category] = selected_categ_files
-        print("select_data:", selected_files)
+        print("select_data:", selected_files, "\n")
 
 
 def match_images(qimg, img_file):
     T_count = 0
     F_count = 0
-    T_file = None
+    file = None
     F_file = None
     orb = cv2.ORB_create()
     q_img = cv2.imread(qimg, cv2.COLOR_BGR2GRAY)
@@ -69,19 +70,19 @@ def match_images(qimg, img_file):
         img = cv2.imread(file, cv2.COLOR_BGR2GRAY)
         kp_i, des_i = orb.detectAndCompute(img, None)
         TF = fla(kp_q, kp_i, des_i, des_q)
-        cv2.imshow("qimg", q_img)
-        cv2.imshow("img", img)
-        cv2.waitKey(10)
+        # cv2.imshow("qimg", q_img)
+        # cv2.imshow("img", img)
+        # cv2.waitKey(10)
         if TF is True:
             T_count += 1
-            T_file = qimg
+            file = qimg
         else:
             F_count += 1
-            F_file = qimg
+            file = qimg
     entitle_file = len(img_file)
     TP = TPC(entitle_file, T_count)
     FP = FPC(entitle_file, F_count)
-    return TP, FP, T_file
+    return TP, FP, file
 
 
 def fla(kp_q, kp_i, des_i, des_q):

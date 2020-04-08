@@ -1,0 +1,7 @@
+select_data:
+
+'avoid': [avoid_o8.png', 'avoid_t23.png','avoid_t27.png']
+'park': [park_o2.png', 'park_o1.png', 'park_o7.png']
+'uturn': [uturn_t17.png', 'uturn_t38.png', 'uturn_t13.png']
+'dont': ['dont_t37.png', 'dont_t29.png', 'dont_t13.png']
+'tun': ['tun_t33.png', tun_t3.png', 'tun_t12.png']
