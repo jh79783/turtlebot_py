@@ -20,7 +20,7 @@
 - 터널 표지판 검출시 navigation을 자동으로 실행시키기 위한 노드
 - navigation자동 실행 실패
 
-##/lane
+## /lane
 - LANE이 검출되면 /lane_msg를 통해 /mode_ch에서 lane주행을 위한 모드 번호를 변경한다.
 - /lane노드에서 /mode_msg를 통해 lane주행을 위한 모드가 들어오게 되면 /lane_msg를 통해 /lane_move로 전달하게 된다.
 - /lane_move는 /lane_msg뿐만 아니라 /mode_msg도 받아 라인 주행을 위한 조건이 준비 되었는지 확인을 한다.
